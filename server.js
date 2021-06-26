@@ -1,39 +1,41 @@
-const express = require('express') // require the express package
-const app = express() // initialize your express app instance
-const weatherData = require('./assets/data.json');
-const axios = require('axios');
-require('dotenv').config();
+const express = require("express"); // require the express package
+const app = express(); // initialize your express app instance
 
-const PORT = process.env.PORT;
+//const moviesData = require("./data/movies.json");
 
-const cors = require('cors'); // enable the communication between the frontend and the backend
+const weatherController= require('./controller/weather.controller');
+const indexController = require('./controller/index.controller');
+const moviesController=require('./controller/movies.controller');
 
-app.use(cors())
-// a server endpoint 
+const cors = require("cors");
+
+const { response } = require("express");
+app.use(cors()); 
+
+
+const port = process.env.PORT;
 
 
 
-app.get('/weather', (req, res) => {
 
- const responseData = weatherData.data.map(obj=> new Weather(obj));
- res.json(responseData);
+app.get("/",indexController );
+
+
+app.get("/weather", weatherController);
+
+
+app.get('/movies',moviesController);
+
+
+
+
+
+
+
+
+
+app.listen(port, () => {
+  console.log(`server running in port: ${port}`);
 });
-
-
-// Model
-class Weather {
-    constructor(weatherData) {
-        this.description = weatherData.weather.description;
-        this.date = weatherData.valid_date;
-
-    }
-}
- 
-app.listen(PORT,()  => {
-  console.log(`Server started on ${PORT}`);
-    }); // kick start the express server to work
-
-
-
-
     // http://localhost:3001/weather?lon=151&lat=-33.87
+
